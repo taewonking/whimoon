@@ -7,34 +7,69 @@ matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 st.set_page_config(page_title="Calculator", page_icon="🧮", layout="centered")
 
-# ── 화려한 배경 스타일 추가 ────────────────────────────────
+# ── 밤하늘의 별 배경 스타일 ────────────────────────────────
 st.markdown("""
 <style>
-    /* 전체 배경 그라데이션 */
-    .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
-        background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
     }
     
-    @keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    /* 밤하늘 배경 */
+    .stApp {
+        background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #2d1b4e 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* 별 생성 */
+    .stApp::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(2px 2px at 20% 30%, #eee, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 60% 70%, #fff, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 50% 50%, #fff, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 80% 10%, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 90% 60%, #fff, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 30% 80%, #fff, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 10% 40%, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 40% 90%, #eee, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 70% 40%, #fff, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 85% 85%, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 15% 60%, #fff, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 55% 25%, #eee, rgba(0,0,0,0)),
+            radial-gradient(1px 1px at 75% 75%, #fff, rgba(0,0,0,0)),
+            radial-gradient(2px 2px at 25% 15%, #fff, rgba(0,0,0,0));
+        background-repeat: repeat;
+        background-size: 100% 100%;
+        background-position: 0 0;
+        pointer-events: none;
+        animation: twinkle 3s ease-in-out infinite;
     }
     
     /* 메인 컨텐츠 배경 */
     .main {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(15, 15, 35, 0.8);
         border-radius: 20px;
         padding: 30px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(147, 112, 219, 0.3);
         backdrop-filter: blur(10px);
+        border: 1px solid rgba(147, 112, 219, 0.3);
     }
     
     /* 제목 스타일 */
     h1 {
-        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+        background: linear-gradient(135deg, #7c3aed, #a78bfa, #60a5fa);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -42,74 +77,87 @@ st.markdown("""
         font-weight: 900 !important;
         text-align: center;
         margin-bottom: 10px;
+        text-shadow: 0 0 30px rgba(147, 112, 219, 0.5);
     }
     
     /* 부제목 스타일 */
     h2, h3 {
-        color: #667eea;
+        color: #a78bfa;
         font-weight: 700;
+        text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
     }
     
     /* 버튼 스타일 */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        background: linear-gradient(135deg, #7c3aed, #a78bfa) !important;
         color: white !important;
-        border: none !important;
+        border: 1px solid rgba(167, 139, 250, 0.5) !important;
         border-radius: 10px !important;
         padding: 12px 24px !important;
         font-weight: 600 !important;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4) !important;
+        box-shadow: 0 8px 20px rgba(124, 58, 237, 0.5), 0 0 20px rgba(124, 58, 237, 0.3) !important;
         transition: all 0.3s ease !important;
     }
     
     .stButton > button:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6) !important;
+        box-shadow: 0 12px 30px rgba(124, 58, 237, 0.7), 0 0 30px rgba(124, 58, 237, 0.5) !important;
     }
     
     /* 입력창 스타일 */
     .stNumberInput > div > div > input,
     .stSelectbox > div > div > select,
     .stTextInput > div > div > input {
-        border: 2px solid #667eea !important;
+        border: 2px solid #7c3aed !important;
         border-radius: 10px !important;
         padding: 12px !important;
-        background: white !important;
+        background: rgba(30, 27, 60, 0.6) !important;
+        color: #e9d5ff !important;
     }
     
     /* 성공 메시지 */
     .stSuccess {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(79, 172, 254, 0.1)) !important;
-        border-left: 5px solid #10b981 !important;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(96, 165, 250, 0.1)) !important;
+        border-left: 5px solid #22c55e !important;
         border-radius: 10px !important;
+        border: 1px solid rgba(34, 197, 94, 0.3) !important;
     }
     
     /* 에러 메시지 */
     .stError {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1)) !important;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(249, 115, 22, 0.1)) !important;
         border-left: 5px solid #ef4444 !important;
         border-radius: 10px !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
     }
     
     /* 구분선 */
     .stDivider {
-        border-color: #667eea !important;
-        opacity: 0.3 !important;
+        border-color: #7c3aed !important;
+        opacity: 0.5 !important;
     }
     
     /* 메트릭 박스 */
     .stMetric {
-        background: linear-gradient(135deg, #667eea15, #764ba215) !important;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.1)) !important;
         border-radius: 10px !important;
         padding: 20px !important;
-        border-left: 5px solid #667eea !important;
+        border-left: 5px solid #7c3aed !important;
+        border: 1px solid rgba(124, 58, 237, 0.3) !important;
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.2) !important;
     }
     
     /* 확장 박스 */
     .streamlit-expanderHeader {
-        background: linear-gradient(135deg, #667eea10, #764ba210) !important;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.1)) !important;
         border-radius: 10px !important;
-        color: #667eea !important;
+        color: #a78bfa !important;
+        border: 1px solid rgba(124, 58, 237, 0.2) !important;
+    }
+    
+    /* 텍스트 색상 */
+    p, span, label {
+        color: #e9d5ff !important;
     }
 </style>
 """, unsafe_allow_html=True)
