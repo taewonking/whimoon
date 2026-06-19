@@ -7,191 +7,39 @@ matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 st.set_page_config(page_title="Calculator", page_icon="🧮", layout="centered")
 
-# ── 밤하늘의 별 배경 스타일 ────────────────────────────────
+# ── 간단한 밤하늘 별 배경 스타일 ────────────────────────────────
 st.markdown("""
 <style>
-    @keyframes twinkle {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 1; }
-    }
-    
     /* 밤하늘 배경 */
     .stApp {
-        background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #2d1b4e 100%);
-        position: relative;
-        overflow: hidden;
+        background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #2d1b4e 100%) !important;
     }
     
-    /* 별 생성 */
-    .stApp::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-            radial-gradient(2px 2px at 20% 30%, #eee, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 60% 70%, #fff, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 50% 50%, #fff, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 80% 10%, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 90% 60%, #fff, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 30% 80%, #fff, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 10% 40%, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 40% 90%, #eee, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 70% 40%, #fff, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 85% 85%, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 15% 60%, #fff, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 55% 25%, #eee, rgba(0,0,0,0)),
-            radial-gradient(1px 1px at 75% 75%, #fff, rgba(0,0,0,0)),
-            radial-gradient(2px 2px at 25% 15%, #fff, rgba(0,0,0,0));
-        background-repeat: repeat;
-        background-size: 100% 100%;
-        background-position: 0 0;
-        pointer-events: none;
-        animation: twinkle 3s ease-in-out infinite;
+    /* 메인 콘텐츠 */
+    .main > div {
+        background: rgba(20, 15, 50, 0.95) !important;
     }
     
-    /* 메인 컨텐츠 배경 - 더 밝고 명확하게 */
-    .main {
-        background: rgba(20, 15, 50, 0.9) !important;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(147, 112, 219, 0.5);
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(147, 112, 219, 0.6);
+    /* 텍스트 색상 */
+    h1, h2, h3, p, label, span {
+        color: #e9d5ff !important;
     }
     
-    /* 제목 스타일 */
-    h1 {
-        background: linear-gradient(135deg, #a78bfa, #c4b5fd, #60a5fa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: 3em !important;
-        font-weight: 900 !important;
-        text-align: center;
-        margin-bottom: 10px;
-        text-shadow: 0 0 30px rgba(167, 139, 250, 0.8);
+    /* 입력 요소 */
+    input, select {
+        background-color: rgba(30, 27, 80, 0.8) !important;
+        color: #f3e8ff !important;
+        border: 2px solid #a78bfa !important;
     }
     
-    /* 부제목 스타일 */
-    h2, h3 {
-        color: #c4b5fd !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 15px rgba(196, 181, 253, 0.5) !important;
-    }
-    
-    /* 버튼 스타일 */
-    .stButton > button {
+    /* 버튼 */
+    button {
         background: linear-gradient(135deg, #a78bfa, #c4b5fd) !important;
         color: #0f0f23 !important;
-        border: 2px solid rgba(196, 181, 253, 0.8) !important;
-        border-radius: 10px !important;
-        padding: 12px 24px !important;
-        font-weight: 700 !important;
-        box-shadow: 0 8px 20px rgba(167, 139, 250, 0.6), 0 0 30px rgba(167, 139, 250, 0.5) !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    .stButton > button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 12px 30px rgba(167, 139, 250, 0.8), 0 0 40px rgba(167, 139, 250, 0.7) !important;
-    }
-    
-    /* 입력창 스타일 */
-    .stNumberInput > div > div > input,
-    .stSelectbox > div > div > select,
-    .stTextInput > div > div > input {
-        border: 2px solid #a78bfa !important;
-        border-radius: 10px !important;
-        padding: 12px !important;
-        background: rgba(30, 27, 80, 0.8) !important;
-        color: #f3e8ff !important;
-        font-weight: 500 !important;
-    }
-    
-    .stNumberInput > div > div > input::placeholder,
-    .stTextInput > div > div > input::placeholder {
-        color: #c4b5fd !important;
-    }
-    
-    /* 라벨 텍스트 */
-    label {
-        color: #e9d5ff !important;
-        font-weight: 600 !important;
-    }
-    
-    /* 성공 메시지 */
-    .stSuccess {
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(96, 165, 250, 0.15)) !important;
-        border-left: 5px solid #22c55e !important;
-        border-radius: 10px !important;
-        border: 2px solid rgba(34, 197, 94, 0.5) !important;
-        color: #86efac !important;
-    }
-    
-    /* 에러 메시지 */
-    .stError {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15)) !important;
-        border-left: 5px solid #ef4444 !important;
-        border-radius: 10px !important;
-        border: 2px solid rgba(239, 68, 68, 0.5) !important;
-        color: #fca5a5 !important;
-    }
-    
-    /* 구분선 */
-    .stDivider {
-        border-color: #a78bfa !important;
-        opacity: 0.7 !important;
-    }
-    
-    /* 메트릭 박스 */
-    .stMetric {
-        background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(196, 181, 253, 0.15)) !important;
-        border-radius: 10px !important;
-        padding: 20px !important;
-        border-left: 5px solid #a78bfa !important;
-        border: 2px solid rgba(167, 139, 250, 0.4) !important;
-        box-shadow: 0 0 20px rgba(167, 139, 250, 0.3) !important;
-    }
-    
-    /* 메트릭 텍스트 */
-    .stMetric label {
-        color: #c4b5fd !important;
-    }
-    
-    .stMetric > div {
-        color: #f3e8ff !important;
-    }
-    
-    /* 확장 박스 */
-    .streamlit-expanderHeader {
-        background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(196, 181, 253, 0.15)) !important;
-        border-radius: 10px !important;
-        color: #c4b5fd !important;
-        border: 2px solid rgba(167, 139, 250, 0.3) !important;
-        font-weight: 600 !important;
-    }
-    
-    /* 테이블 스타일 */
-    table {
-        color: #e9d5ff !important;
-    }
-    
-    thead {
-        background: rgba(167, 139, 250, 0.2) !important;
-    }
-    
-    tbody tr {
-        border-bottom: 1px solid rgba(167, 139, 250, 0.2) !important;
-    }
-    
-    /* 일반 텍스트 */
-    p, span {
-        color: #e9d5ff !important;
     }
 </style>
+
+✨ 별이 반짝이는 밤하늘 배경 ✨
 """, unsafe_allow_html=True)
 
 st.title("🧮 Calculator")
